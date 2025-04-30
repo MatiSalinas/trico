@@ -48,3 +48,80 @@ export interface VariacionProducto {
     precio_adicional: number;
     producto?: Producto;
 }
+
+export interface Ingrediente {
+    id?: number;
+    nombre: string;
+    stock : number;
+    unidad_medida: string;
+    costo: number;
+    productos?: ProductoIngrediente[];
+}
+
+export interface ProductoIngrediente {
+    id?: number;
+    producto_id: number;
+    ingrediente_id: number;
+    cantidad: number;
+    producto?: Producto;
+    ingrediente?: Ingrediente;
+}
+
+export interface Pedido {
+    id?: Number;
+    nombre_cliente: string;
+    telefono: string;
+    direccion?: string | null;
+    latitud?: number | null;
+    longitud?: number | null;
+    zona_entrega: "retiro" | "cerca" | "media" | "lejos";
+    costo_envio: number;
+    subtotal: number;
+    total: number;
+    metodo_pago: "efectivo" | "transferencia" | "tarjeta" | "online" | "mixto";
+    estado: "pendiente" | "confirmado" | "en_preparcion" | "enviado" | "entregado" | "cancelado";
+    origen: "web" | "telefono" | "presencial";
+    obervaciones?: string | null;
+    fecha_pedido?: Date;
+    usuario_id?: number | null;
+    usuario?: Usuario;
+    detalles?: DetallePedido[];
+}
+
+export interface PedidoConDetalles extends Pedido {
+    detalles: Array< DetallePedido & {
+        producto: Producto,
+        variacion: VariacionProducto;
+    }>
+}
+
+export interface DetallePedido {
+    id?: number;
+    pedido_id: number;
+    producto_id: number;
+    variacion_id: number;
+    cantidad: number;
+    precio_unitario: number;
+    subtotal: number;
+    observaciones?: string | null
+}
+
+export interface ZonaEntrega {
+    id?: number;
+    nombre: string;
+    tipo: "retiro" | "cerca" | "media" | "lejos";
+    costo: number;
+    radio_km: number;
+}
+
+export interface MovimientoInventario {
+    id?: number;
+    ingrediente_id: number;
+    cantidad: number;
+    tipo: "entrada" | "salida" | "ajuste";
+    motivo?: string | null;
+    fecha?: Date;
+    usuario_id?: number | null;
+    ingrediente?: Ingrediente;
+    usuario?: Usuario;
+}
