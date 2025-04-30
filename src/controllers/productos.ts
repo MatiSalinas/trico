@@ -24,7 +24,8 @@ const updateProducto = (req: Request, res: Response) => {
 }
 const postProducto = (req: Request, res: Response) => {
     try {
-        
+        const { body } = req;
+        res.status(201).send({body});
     } catch (error) {
         handleHttp(res, "ERROR_POST_PRODUCTO");
     }
@@ -36,3 +37,5 @@ const delteProducto = (req: Request, res: Response) => {
         handleHttp(res, "ERROR_DELETE_PRODUCTO");
     }
 }
+
+export { getProductos, getProducto, updateProducto, postProducto, delteProducto };
