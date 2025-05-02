@@ -13,11 +13,11 @@ export interface UsuarioAuth extends Omit<Usuario, 'password'> {
 }
 
 export interface Categoria {
-    id?: number;
+    id?: number | null;
     nombre: string;
     descripcion?: string | null;
-    orden: number;
-    activo: boolean;
+    orden?: number;
+    activo?: boolean;
 }
 
 export interface Producto {

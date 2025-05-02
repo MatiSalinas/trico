@@ -1,10 +1,13 @@
 import { Request, Response } from "express";
 import { handleHttp } from "../utils/error.handle"
-const getCategorias = (req: Request, res: Response) => {
+import { CategoriaModel } from "../models/CategoriaModel";
+import { Categoria } from "../interfaces/producto.interface";
+const getCategorias = async (req: Request, res: Response) : Promise<void> => {
     try {
-        
+        const response = await CategoriaModel.findAll();
+       res.status(200).send(response)
     } catch (error) {
-        handleHttp(res, "ERROR_GET_CATEGORIAS");
+        handleHttp(res, "ERROR_GET_CATEGORIAS", error);
         
     }
 }
@@ -16,11 +19,21 @@ const putCategorias = (req: Request, res: Response) => {
         
     }
 }
-const postCategorias = (req: Request, res: Response) => {
+const postCategorias = async (req: Request, res: Response) : Promise<void> => {
     try {
-        
+        const { nombre, descripcion = null, orden = 1, activo = true } = req.body;
+
+        const categoriaData: Categoria = {
+            nombre,
+            descripcion,
+            orden,
+            activo,
+        };
+
+        const response = await CategoriaModel.createCategoria(categoriaData)
+        res.status(201).send(response) 
     } catch (error) {
-        handleHttp(res, "ERROR_POST_CATEGORIAS");
+        handleHttp(res, "ERROR_POST_CATEGORIAS", error);
         
     }
 }

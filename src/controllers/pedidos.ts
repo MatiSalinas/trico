@@ -1,11 +1,11 @@
-import { Request, Response } from 'express';
+import e, { Request, Response } from 'express';
 import { handleHttp } from '../utils/error.handle';
 
 const postPedido = (req: Request, res: Response) => {
     try {
         
     } catch (error) {
-        handleHttp(res, "ERORR_POST_PEDIDOS");
+        handleHttp(res, "ERORR_POST_PEDIDOS",error);
     }
 }
 const getPedidos = (req: Request, res: Response) => {
