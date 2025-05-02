@@ -30,7 +30,7 @@ const postProducto = (req: Request, res: Response) => {
         handleHttp(res, "ERROR_POST_PRODUCTO");
     }
 }
-const delteProducto = (req: Request, res: Response) => {
+const deleteProducto = (req: Request, res: Response) => {
     try {
         
     } catch (error) {
@@ -38,4 +38,33 @@ const delteProducto = (req: Request, res: Response) => {
     }
 }
 
-export { getProductos, getProducto, updateProducto, postProducto, delteProducto };
+const getProductoVariaciones = (req: Request, res: Response) => {
+    try {
+        
+    } catch (error) {
+        handleHttp(res, "ERROR_GET_PRODUCTO_VARIACIONES");
+    } 
+}
+const postProductoVariaciones = (req: Request, res: Response) => {
+    try {
+        
+    } catch (error) {
+        handleHttp(res, "ERROR_POST_PRODUCTO_VARIACIONES");
+    }
+}
+const putProductoVariaciones = (req: Request, res: Response) => {
+    try {
+        
+    } catch (error) {
+        handleHttp(res, "ERROR_PUT_PRODUCTO_VARIACIONES");
+    }
+}
+const deleteProductoVariaciones = (req: Request, res: Response) => {
+    try {
+        
+    } catch (error) {
+        handleHttp(res, "ERROR_DELETE_PRODUCTO_VARIACIONES");
+    }
+}
+
+export { getProductos, getProducto, updateProducto, postProducto, deleteProducto, getProductoVariaciones, postProductoVariaciones, putProductoVariaciones, deleteProductoVariaciones };

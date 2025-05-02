@@ -1,5 +1,5 @@
-import { Request, Response, Router } from "express";
-import { delteProducto, getProducto, getProductos, postProducto, updateProducto } from "../controllers/productos";
+import { Router } from "express";
+import { deleteProductoVariaciones, deleteProducto, getProducto, getProductos, getProductoVariaciones, postProducto, putProductoVariaciones, updateProducto, postProductoVariaciones } from "../controllers/productos";
 
 const router = Router();
 
@@ -7,6 +7,10 @@ router.get('/', getProductos);
 router.get('/:id', getProducto);
 router.post('/', postProducto);
 router.put('/:id', updateProducto);
-router.delete('/:id', delteProducto);
+router.delete('/:id', deleteProducto);
+router.get('/:id/variaciones', getProductoVariaciones);
+router.delete('/:id/variaciones', deleteProductoVariaciones);
+router.post('/:id/variaciones', postProductoVariaciones);
+router.put('/:id/variaciones', putProductoVariaciones);
 
 export { router }
