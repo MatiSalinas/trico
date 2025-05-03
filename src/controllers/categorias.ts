@@ -11,11 +11,21 @@ const getCategorias = async (req: Request, res: Response) : Promise<void> => {
         
     }
 }
-const putCategorias = (req: Request, res: Response) => {
+const putCategorias = async (req: Request, res: Response) => {
     try {
-        
+        const { id } = req.params;
+        const categoriaData: Partial<Categoria> = req.body;
+        console.log(categoriaData);
+        const response = await CategoriaModel.updateCategoria(Number(id), categoriaData);
+        if (response) { 
+            res.status(200).send({ message: "Categoria actualizada correctamente" });
+        }
+        else {  
+            res.status(404).send({ message: "Categoria no encontrada" });
+        }
+
     } catch (error) {
-        handleHttp(res, "ERROR_PUT_CATEGORIAS");
+        handleHttp(res, "ERROR_PUT_CATEGORIAS",error);
         
     }
 }
@@ -37,9 +47,16 @@ const postCategorias = async (req: Request, res: Response) : Promise<void> => {
         
     }
 }
-const deleteCategorias = (req: Request, res: Response) => {
+
+const deleteCategorias = async (req: Request, res: Response) => {
     try {
-        
+        const { id } = req.params;
+        const response = await CategoriaModel.deleteCategoria(Number(id)); 
+        if (response) {
+            res.status(200).send({ message: "Categoria eliminada correctamente"});
+        } else {
+            res.status(404).send({ message: "Categoria no encontrada" });
+        }
     } catch (error) {
         handleHttp(res, "ERROR_DELETE_CATEGORIAS");
         

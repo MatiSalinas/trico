@@ -1,11 +1,13 @@
 import { Request, Response } from "express";
 import { handleHttp } from "../utils/error.handle"
+import { ProductoModel } from "../models/ProductoModel";
 
-const getProductos = (req: Request, res: Response) => {
+const getProductos = async (req: Request, res: Response) => {
     try {
-        
+        const respuesta = await ProductoModel.findAll();
+        res.status(200).send({ respuesta });
     } catch (error) {
-        handleHttp(res, "ERROR_GET_PRODUCTOS");
+        handleHttp(res, "ERROR_GET_PRODUCTOS",error);
     }
 }
 const getProducto = (req: Request, res: Response) => {
