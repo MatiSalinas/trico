@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { handleHttp } from "../utils/error.handle"
 import { ProductoModel } from "../models/ProductoModel";
+import { Producto } from "../interfaces/producto.interface";
 
 const getProductos = async (req: Request, res: Response) => {
     try {
@@ -16,27 +17,49 @@ const getProducto = async (req: Request, res: Response) => {
         const respuesta = await ProductoModel.findById(Number(id));
         if (respuesta) {
             res.status(200).send({ respuesta });
+            return;
         }
         else { 
             res.status(404).send({ message: "Producto no encontrado" });
+            return;
         }
     } catch (error) {
-        handleHttp(res, "ERROR_GET_PRODUCTO");
+        handleHttp(res, "ERROR_GET_PRODUCTO",error);
     }
 }
-const updateProducto = (req: Request, res: Response) => {
+const updateProducto = async  (req: Request, res: Response) => {
     try {
-        
+        const { id } = req.params;
+        const productoData : Partial<Producto> = req.body;
+        const response = await ProductoModel.updateProducto(Number(id), productoData);
+        if (response) { 
+            res.status(200).send({ message: "Producto actualizado correctamente" });
+        }
+        else {  
+            res.status(404).send({ message: "Producto no encontrado" });
+        }
     } catch (error) {
-        handleHttp(res, "ERROR_UPDATE_PRODUCTO");
+        handleHttp(res, "ERROR_UPDATE_PRODUCTO",error);
     }
 }
-const postProducto = (req: Request, res: Response) => {
+
+const postProducto = async (req: Request, res: Response) : Promise<void> => {
     try {
-        const { body } = req;
-        res.status(201).send({body});
+        const { categoria_id,nombre ,descripcion = null, precio, imagen = null, disponible = true, destacado = false } = req.body;
+        const productoData: Producto = { 
+            categoria_id,
+            nombre,
+            descripcion,
+            precio,
+            imagen,
+            disponible,
+            destacado
+         }
+        const response = await ProductoModel.createProducto(productoData);
+        res.status(201).send(response);
+        return;
     } catch (error) {
-        handleHttp(res, "ERROR_POST_PRODUCTO");
+        handleHttp(res, "ERROR_POST_PRODUCTO",error);
     }
 }
 const deleteProducto = (req: Request, res: Response) => {

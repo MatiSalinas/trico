@@ -19,8 +19,33 @@ export class ProductoModel {
             const [row] = await pool.execute(sql , [id]);
             const producto = (row as Producto[]);
             return producto.length > 0 ? producto[0] : null;
+            
         } catch (error) {
             throw new Error(`Error al obtener el producto ${error}`);
         }
+    }
+
+    static async updateProducto(id: number, producto: Partial<Producto>): Promise<boolean> {
+        const entries = Object.entries(producto).filter(([key]) => key !== 'id');
+        if (entries.length === 0) return false;
+        const setClause = entries.map(([key]) => `${key} = ?`).join(', ');
+            const values = entries.map(([, value]) => value);
+            const query = `UPDATE producto SET ${setClause} WHERE id_producto = ?`;
+            const [result] = await pool.query(query, [...values, id]);
+            return (result as any).affectedRows > 0;
+    }
+
+    static async createProducto(producto: Producto): Promise<Producto> {
+        try {
+            const { categoria_id,nombre, descripcion, precio, imagen, disponible } = producto;
+            const parametros = [categoria_id,nombre, descripcion, precio, imagen, disponible];
+            const sql = "INSERT INTO productos (categoria_id,nombre, descripcion, precio, imagen, disponible) VALUES (?, ?, ?, ?, ?, ?);"
+            const [result] = await pool.execute(sql, parametros);
+            const insertId = (result as any).insertId;
+            return { ...producto, id: insertId };
+        } catch (error) {
+            throw new Error(`Error al crear un nuevo producto ${error}`);
+        }
+
     }
 }
