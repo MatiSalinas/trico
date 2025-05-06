@@ -10,9 +10,16 @@ const getProductos = async (req: Request, res: Response) => {
         handleHttp(res, "ERROR_GET_PRODUCTOS",error);
     }
 }
-const getProducto = (req: Request, res: Response) => {
+const getProducto = async (req: Request, res: Response) => {
     try {
-        
+        const { id } = req.params;
+        const respuesta = await ProductoModel.findById(Number(id));
+        if (respuesta) {
+            res.status(200).send({ respuesta });
+        }
+        else { 
+            res.status(404).send({ message: "Producto no encontrado" });
+        }
     } catch (error) {
         handleHttp(res, "ERROR_GET_PRODUCTO");
     }

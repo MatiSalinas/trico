@@ -11,4 +11,16 @@ export class ProductoModel {
             throw new Error(`Error al obtener los productos ${error}`);
         }
     }
+
+
+    static async findById(id: number): Promise<Producto | null> {
+        try {
+            const sql = "SELECT * FROM productos WHERE id_producto = ? AND disponible = 1;"
+            const [row] = await pool.execute(sql , [id]);
+            const producto = (row as Producto[]);
+            return producto.length > 0 ? producto[0] : null;
+        } catch (error) {
+            throw new Error(`Error al obtener el producto ${error}`);
+        }
+    }
 }

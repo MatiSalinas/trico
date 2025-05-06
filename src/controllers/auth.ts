@@ -1,6 +1,7 @@
 import { Request, Response } from "express"
-imort {registrarUsuario, loginUsuari} from "../services/authService"
+import {registrarUsuario, loginUsuario} from "../services/authService"
 const registerController = async (req: Request, res: Response) => {
+    const responseUser = await registrarUsuario();
 
 }
 
