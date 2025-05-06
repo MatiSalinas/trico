@@ -1,3 +1,4 @@
+import { deleteProductoVariaciones } from '../controllers/productos';
 import  pool  from '../db/connection';
 import { Producto, VariacionProducto } from '../interfaces/producto.interface';
 
@@ -71,6 +72,33 @@ export class ProductoModel {
         } catch (error) {
             throw new Error(`Error al obtener las variaciones del producto ${error}`);
         }
-}
+    }
+
+    static async createProductoVariacion(variacion: VariacionProducto) : Promise<VariacionProducto> {
+        try {
+            const { producto_id, nombre, precio_adicional } = variacion;
+            const sql = "INSERT INTO variaciones_producto (producto_id, nombre, precio_adicional) VALUES (?, ?, ?);"
+            const parametros = [producto_id, nombre, precio_adicional];
+            const [result] = await pool.execute(sql, parametros);
+            const insertId = (result as any).insertId;
+            return { ...variacion, id: insertId };
+        } catch (error) {
+            throw new Error(`Error al crear una nueva variacion ${error}`);
+        }
+    }
+
+    static async deleteProductoVariacion( id_variacion: number,id:number) : Promise<boolean> {
+        try {
+            const sql = "DELETE FROM variaciones_producto WHERE id_variaciones_producto = ? and producto_id = ?;";
+            const [result] = await pool.execute(sql, [id_variacion, id]);
+            const affectedRows = (result as any).affectedRows;
+            if (affectedRows === 0) {
+                return false; // No se eliminó ninguna fila, el ID no existe
+            }
+            return true;
+        } catch (error) {
+            throw new Error(`Error al eliminar la variacion ${error}`);
+        }
+    }
 
 }

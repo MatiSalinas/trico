@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { handleHttp } from "../utils/error.handle"
 import { ProductoModel } from "../models/ProductoModel";
-import { Producto } from "../interfaces/producto.interface";
+import { Producto, VariacionProducto } from "../interfaces/producto.interface";
 
 const getProductos = async (req: Request, res: Response) => {
     try {
@@ -92,9 +92,20 @@ const getProductoVariaciones = async (req: Request, res: Response)  => {
         handleHttp(res, "ERROR_GET_PRODUCTO_VARIACIONES");
     } 
 }
-const postProductoVariaciones = (req: Request, res: Response) => {
+const postProductoVariaciones = async (req: Request, res: Response) => {
     try {
-        
+        const { producto_id, nombre, precio_adicional = 0} = req.body;
+        const variacionData : VariacionProducto = {
+            producto_id,
+            nombre,
+            precio_adicional
+        }
+        const response = await ProductoModel.createProductoVariacion(variacionData);
+        if (response) {
+            res.status(201).send({ message: "Variacion creada correctamente" });
+        }
+
+
     } catch (error) {
         handleHttp(res, "ERROR_POST_PRODUCTO_VARIACIONES");
     }
@@ -103,14 +114,21 @@ const putProductoVariaciones = (req: Request, res: Response) => {
     try {
         
     } catch (error) {
-        handleHttp(res, "ERROR_PUT_PRODUCTO_VARIACIONES");
+        handleHttp(res, "ERROR_PUT_PRODUCTO_VARIACIONES",error);
     }
 }
-const deleteProductoVariaciones = (req: Request, res: Response) => {
+const deleteProductoVariaciones = async (req: Request, res: Response) => {
     try {
-        
+        const { id, id_variacion } = req.params;
+        const response = await ProductoModel.deleteProductoVariacion(Number(id_variacion),Number(id));
+        if (response) {
+            res.status(200).send({ message: "Variacion eliminada correctamente" });
+        }
+        else {
+            res.status(404).send({ message: "Variacion no encontrada" });
+        }
     } catch (error) {
-        handleHttp(res, "ERROR_DELETE_PRODUCTO_VARIACIONES");
+        handleHttp(res, "ERROR_DELETE_PRODUCTO_VARIACIONES",error);
     }
 }
 

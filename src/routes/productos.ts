@@ -9,7 +9,7 @@ router.post('/', postProducto);
 router.put('/:id', updateProducto);
 router.delete('/:id', deleteProducto);
 router.get('/:id/variaciones', getProductoVariaciones);
-router.delete('/:id/variaciones', deleteProductoVariaciones);
+router.delete('/:id/variaciones/:id_variacion', deleteProductoVariaciones);
 router.post('/:id/variaciones', postProductoVariaciones);
 router.put('/:id/variaciones', putProductoVariaciones);
 
