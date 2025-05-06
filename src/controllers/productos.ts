@@ -43,7 +43,7 @@ const updateProducto = async  (req: Request, res: Response) => {
     }
 }
 
-const postProducto = async (req: Request, res: Response) : Promise<void> => {
+const postProducto = async (req: Request, res: Response) => {
     try {
         const { categoria_id,nombre ,descripcion = null, precio, imagen = null, disponible = true, destacado = false } = req.body;
         const productoData: Producto = { 
@@ -62,17 +62,32 @@ const postProducto = async (req: Request, res: Response) : Promise<void> => {
         handleHttp(res, "ERROR_POST_PRODUCTO",error);
     }
 }
-const deleteProducto = (req: Request, res: Response) => {
+const deleteProducto = async (req: Request, res: Response) => {
     try {
-        
+        const { id } = req.params;
+        const response = await ProductoModel.deleteProducto(Number(id));
+        if (response) {
+            res.status(200).send({ message: "Producto eliminado correctamente" });
+        } else {
+            res.status(404).send({ message: "Producto no encontrado" });
+        }
+
     } catch (error) {
         handleHttp(res, "ERROR_DELETE_PRODUCTO");
     }
 }
 
-const getProductoVariaciones = (req: Request, res: Response) => {
+const getProductoVariaciones = async (req: Request, res: Response)  => {
     try {
-        
+        const { id } = req.params;
+        const response = await ProductoModel.findVariacionesById(Number(id));
+        if (response) {
+            res.status(200).send({ response });
+            return;
+        } else {
+            res.status(404).send({ message: "Producto no encontrado" });
+            return;
+        }
     } catch (error) {
         handleHttp(res, "ERROR_GET_PRODUCTO_VARIACIONES");
     } 

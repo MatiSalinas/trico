@@ -1,5 +1,5 @@
 import  pool  from '../db/connection';
-import { Producto } from '../interfaces/producto.interface';
+import { Producto, VariacionProducto } from '../interfaces/producto.interface';
 
 export class ProductoModel {
     static async findAll(): Promise<Producto[]> {
@@ -48,4 +48,29 @@ export class ProductoModel {
         }
 
     }
+    
+    static async deleteProducto(id: number) : Promise<boolean> {
+        try {
+            const sql = "DELETE FROM productos WHERE id_producto = ?;";
+            const [result] = await pool.execute(sql, [id]);
+            const affectedRows = (result as any).affectedRows;
+            if (affectedRows === 0) {
+                return false; // No se eliminó ninguna fila, el ID no existe
+            }
+            return true;
+        } catch (error) {
+            throw new Error(`Error al eliminar el producto ${error}`);
+        }
+    }
+
+    static async findVariacionesById(id: number): Promise<VariacionProducto[]> {
+        try {
+            const sql = "SELECT * FROM variaciones_producto WHERE producto_id = ?;"
+            const [rows] = await pool.execute(sql, [id]);
+            return rows as VariacionProducto[];
+        } catch (error) {
+            throw new Error(`Error al obtener las variaciones del producto ${error}`);
+        }
+}
+
 }
