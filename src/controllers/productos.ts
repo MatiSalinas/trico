@@ -110,9 +110,18 @@ const postProductoVariaciones = async (req: Request, res: Response) => {
         handleHttp(res, "ERROR_POST_PRODUCTO_VARIACIONES");
     }
 }
-const putProductoVariaciones = (req: Request, res: Response) => {
+const putProductoVariaciones = async (req: Request, res: Response) => {
     try {
-        
+        const variacionData : Partial<VariacionProducto> = req.body;
+        const { id_variacion} = req.params
+
+        const response = await ProductoModel.updateProductoVariacion(Number(id_variacion), variacionData);
+
+        if (response) {
+            res.status(200).send({ message: "Variacion actualizada correctamente" });
+        } else {
+            res.status(404).send({ message: "Variacion no encontrada" });
+        }
     } catch (error) {
         handleHttp(res, "ERROR_PUT_PRODUCTO_VARIACIONES",error);
     }

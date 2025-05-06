@@ -11,6 +11,6 @@ router.delete('/:id', deleteProducto);
 router.get('/:id/variaciones', getProductoVariaciones);
 router.delete('/:id/variaciones/:id_variacion', deleteProductoVariaciones);
 router.post('/:id/variaciones', postProductoVariaciones);
-router.put('/:id/variaciones', putProductoVariaciones);
+router.put('/:id_variacion/variaciones', putProductoVariaciones);
 
 export { router }

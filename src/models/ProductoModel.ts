@@ -101,4 +101,18 @@ export class ProductoModel {
         }
     }
 
+    static async updateProductoVariacion(id_variacion: number, variacion: Partial<VariacionProducto>) : Promise<Boolean>{
+        try {
+            const entries = Object.entries(variacion).filter(([key]) => key !=='id');
+            const setClause = entries.map(([key])=> `${key} = ?`).join(', ');
+            const values = entries.map(([, value])=>value);
+            const sql = `UPDATE variaciones_producto SET ${setClause} WHERE id_variaciones_producto = ?;`;
+            console.log(sql)
+            const [result] = await pool.execute(sql,[...values, id_variacion])
+            return (result as any).affectedRows > 0;
+            
+        } catch (error) {
+            throw new Error(`Error al actualizar el producto ${error}`)
+        }
+    }
 }
