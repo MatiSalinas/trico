@@ -1,4 +1,4 @@
-import { deleteProductoVariaciones } from '../controllers/productos';
+import { deleteProductoVariaciones } from '../controllers/productos.controller';
 import  pool  from '../db/connection';
 import { Producto, VariacionProducto } from '../interfaces/producto.interface';
 
