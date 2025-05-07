@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { deleteIngredientes, getIngredientes, postIngredientes, putIngredientes } from "../controllers/ingredientes";
+import { deleteIngredientes, getIngredientes, postIngredientes, putIngredientes } from "../controllers/ingredientes.controller";
 
 const router = Router();
 

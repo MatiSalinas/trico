@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { getZona, postZonas, putZonaEstado, deleteZona, verificarZona } from '../controllers/zonaController';
+import { getZona, postZonas, putZonaEstado, deleteZona, verificarZona } from '../controllers/zona.controller';
 
 const router = Router();
 

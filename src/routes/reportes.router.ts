@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { getReporteDiario, getReporteHoras, getReporteMensual, getReportePopulares, getReporteSemanal } from '../controllers/reportesController';
+import { getReporteDiario, getReporteHoras, getReporteMensual, getReportePopulares, getReporteSemanal } from '../controllers/reportes.controller';
 const router = Router();
 
 router.get("/ventas/diario", getReporteDiario );

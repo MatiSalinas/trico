@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { handleHttp } from "../utils/error.handle"
-import { ProductoModel } from "../models/ProductoModel";
+import { ProductoModel } from "../models/Producto.model";
 import { Producto, VariacionProducto } from "../interfaces/producto.interface";
 
 const getProductos = async (req: Request, res: Response) => {

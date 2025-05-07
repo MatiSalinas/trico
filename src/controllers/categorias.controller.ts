@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { handleHttp } from "../utils/error.handle"
-import { CategoriaModel } from "../models/CategoriaModel";
+import { CategoriaModel } from "../models/Categoria.model";
 import { Categoria } from "../interfaces/producto.interface";
 const getCategorias = async (req: Request, res: Response) : Promise<void> => {
     try {
