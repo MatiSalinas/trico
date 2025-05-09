@@ -10,20 +10,31 @@ export class DetallePedidoModel {
             const detallePedido = (row as DetallePedido[]);
             return detallePedido.length < 0 ? null : detallePedido[0];
         } catch (error) {
-            throw new Error(`Error al `)
+            throw new Error(`Error al obtener el detalle`)
         }
       
     }
 
     static async updateDetallePedido(id: number, detalle:Partial <DetallePedido>) : Promise <boolean>{
-        const entries = Object.entries(detalle).filter(([key])=> key !== "id");
-        if (entries.length === 0){
-            return false
+        try{
+            const entries = Object.entries(detalle).filter(([key])=> key !== "id");
+            if (entries.length === 0){
+                return false
+            }
+            const setClause = entries.map(([key]) => `${key} = ?`).join(', ');
+            const values = entries.map(([, key])=> key);
+            const sql = `UPDATE detalle_pedido SET ${setClause} WHERE id_detalle_pedido = ?;`;
+            const [result] = await pool.execute(sql,[...values,id]);
+            return (result as any).affectedRows > 0;
+        }catch(error){
+            throw new Error(`Error al actualizar el producto`)
         }
-        const setClause = entries.map(([key]) => `${key} = ?`).join(', ');
-        const values = entries.map(([, key])=> key);
-        const sql = `UPDATE detalle_pedido SET ${setClause} WHERE id_producto = ?;`;
-        const [result] = await pool.execute(sql,[...values,id]);
+        
+    }
+    
+    static async deleteDetallePedido(id: number) : Promise <boolean> {
+        const sql = `DELETE FROM detalle_pedido WHERE id_detalle_pedido = ?;`;
+        const [result] = await pool.execute(sql,[id]);
         return (result as any).affectedRows > 0;
-    } 
+    }
 }
