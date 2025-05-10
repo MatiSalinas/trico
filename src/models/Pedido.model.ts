@@ -15,10 +15,22 @@ export class PedidoModel {
         return pedido.length > 0 ? pedido[0] : null;
     }
 
-    static async updatePedido(id: number, estado: string) : Promise <boolean>{
+    static async updatePedidoEstado(id: number, estado: string) : Promise <boolean>{
         const sql = "UPDATE pedido SET estado = ? WHERE id_pedido = ?;";
         const [result] = await pool.execute(sql,[estado,id]);
         return (result as any).affectedRows > 0;
+    }
+
+    static async updatePedido(id: number, pedido:Partial<Pedido>) : Promise<boolean>{
+        
+        const entries = Object.entries(pedido).filter(([key])=> key !== "id");
+        const setClause = entries.map(([key]) => `${key} = ?`).join(", ");
+        const values = entries.map(([, key]) => key);
+
+        const sql = `UPDATE pedido SET ${setClause} WHERE id_pedidp = ?;`;
+        const [result] = await pool.execute(sql, values);
+        return (result as any).affectedRows > 0;
+
     }
 
     static async createPedido(pedido: Pedido) : Promise <boolean>{
