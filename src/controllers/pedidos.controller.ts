@@ -33,11 +33,18 @@ const getPedido = async (req: Request, res: Response) => {
         handleHttp(res, "ERORR_GET_PEDIDO",error);
     }
 }
-const putPedidoEstado = (req: Request, res: Response) => {
+const putPedidoEstado = async(req: Request, res: Response) => {
     try {
-        
+        const {id} = req.params
+        const estado = req.body;
+        const response = await PedidoModel.updatePedido(Number(id),estado);
+        if(response){
+            res.status(200).send("Estado actualizado correctamente");
+            return;
+        }
+        res.status(400).send("Error al actualizar el estado del pedido.")
     } catch (error) {
-        handleHttp(res, "ERORR_PUT_PEDIDO_ESTADO");
+        handleHttp(res, "ERORR_PUT_PEDIDO_ESTADO",error);
     }
 }
 export { postPedido, getPedidos, getPedido, putPedidoEstado };
