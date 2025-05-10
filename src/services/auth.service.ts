@@ -1,5 +1,7 @@
-const registrarUsuario = async () => {
+import { Auth } from "../interfaces/auth.inteface";
 
+const registrarUsuario = async (authUser: Auth) => {
+    
 };
 const loginUsuario = async () => {
 

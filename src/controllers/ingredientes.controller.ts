@@ -9,7 +9,7 @@ const getIngredientes = async (req: Request, res: Response) => {
         res.status(200).send(response);
         return;
     } catch (error) {
-        handleHttp(res, "ERROR_GET_INGREDIENTES");
+        handleHttp(res, "ERROR_GET_INGREDIENTES",error);
     }
 }
 const postIngredientes = async (req: Request, res: Response) => {
@@ -22,7 +22,7 @@ const postIngredientes = async (req: Request, res: Response) => {
         }
         res.status(400).send({message: "Error al crear el ingrediente"});
     } catch (error) {
-        handleHttp(res, "ERROR_POST_INGREDIENTES");
+        handleHttp(res, "ERROR_POST_INGREDIENTES",error);
     }
 }
 const putIngredientes = async (req: Request, res: Response) => {
@@ -36,7 +36,7 @@ const putIngredientes = async (req: Request, res: Response) => {
         }
         res.status(400).send({message: "Error al actualizar el ingrediente"});
     } catch (error) {
-        handleHttp(res, "ERROR_PUT_INGREDIENTES");
+        handleHttp(res, "ERROR_PUT_INGREDIENTES",error);
     }
 }
 const deleteIngredientes = async (req: Request, res: Response) => {
@@ -49,7 +49,7 @@ const deleteIngredientes = async (req: Request, res: Response) => {
         }
         res.status(400).send({message: "Error al eliminar el ingrediente"});
     } catch (error) {
-        handleHttp(res, "ERROR_DELETE_INGREDIENTES");
+        handleHttp(res, "ERROR_DELETE_INGREDIENTES",error);
     }
 }
 
