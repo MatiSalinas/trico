@@ -2,6 +2,7 @@ import e, { Request, Response } from 'express';
 import { handleHttp } from '../utils/error.handle';
 import { Pedido } from '../interfaces/producto.interface';
 import { PedidoModel } from '../models/Pedido.model';
+import { pedidoServicios } from '../services/pedidos.service';
 
 const postPedido = async (req: Request, res: Response) => {
     try {
@@ -27,7 +28,7 @@ const getPedidos = async (req: Request, res: Response) => {
 const getPedido = async (req: Request, res: Response) => {
     try {
         const {id} = req.params;
-        const response = await PedidoModel.findPedidoByID(Number(id));
+        const response = await pedidoServicios.getPedidoCompleto(Number(id));
         res.status(200).send(response);
     } catch (error) {
         handleHttp(res, "ERORR_GET_PEDIDO",error);
