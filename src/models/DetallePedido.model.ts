@@ -3,14 +3,14 @@ import { DetallePedido } from "../interfaces/producto.interface";
 
 export class DetallePedidoModel {
     
-    static async getDetallePedidoById(id: number) : Promise <DetallePedido[] | null> {
+    static async findDetallePedidoById(id: number) : Promise <DetallePedido[] | null> {
         try {
-            const sql = "SELECT * FROM detalle_pedido WHERE id_pedido = ?;"
+            const sql = "SELECT * FROM detalle_pedido WHERE pedido_id = ?;"
             const [row] = await pool.execute(sql,[id]);
             const detallePedido = (row as DetallePedido[]);
             return detallePedido.length < 0 ? null : detallePedido;
         } catch (error) {
-            throw new Error(`Error al obtener el detalle`)
+            throw new Error(`Error al obtener el detalle ${error}`)
         }
       
     }

@@ -74,6 +74,17 @@ export class ProductoModel {
         }
     }
 
+    static async findVariacionById(id: number): Promise<VariacionProducto | null> {
+        try {
+            const sql = "SELECT * FROM variaciones_producto WHERE id_variaciones_producto = ?;"
+            const [row] = await pool.execute(sql, [id]);
+            const variacion = (row as VariacionProducto[]);
+            return variacion.length > 0 ? variacion[0] : null;
+        } catch (error) {
+            throw new Error(`Error al obtener la variacion ${error}`);
+        }
+    }
+
     static async createProductoVariacion(variacion: VariacionProducto) : Promise<VariacionProducto> {
         try {
             const { producto_id, nombre, precio_adicional } = variacion;
