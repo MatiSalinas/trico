@@ -1,5 +1,6 @@
 import { Router } from "express";
-import { getPedido, getPedidos, postPedido, putPedidoEstado } from "../controllers/pedidos.controller";
+import { getPedido, getPedidos, putPedidoEstado ,postPedido} from "../controllers/pedidos.controller";
+
 
 const router = Router();
 
@@ -8,4 +9,4 @@ router.get("/:id", getPedido);
 router.post("/", postPedido);
 router.put("/:id/estado", putPedidoEstado);
 
-export { router };
+export {router}

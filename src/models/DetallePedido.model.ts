@@ -1,6 +1,6 @@
 import pool from "../db/connection";
 import { DetallePedido } from "../interfaces/producto.interface";
-
+//TODO pasar la logica de calcular el total de pedidos al backend
 export class DetallePedidoModel {
     
     static async findDetallePedidoById(id: number) : Promise <DetallePedido[] | null> {
@@ -37,4 +37,17 @@ export class DetallePedidoModel {
         const [result] = await pool.execute(sql,[id]);
         return (result as any).affectedRows > 0;
     }
+
+    static async createDetallePedidoTx(pedido_id: number, detalle: DetallePedido, conn: any): Promise<void> {
+        const { producto_id, variacion_id, cantidad, precio_unitario, subtotal,  } = detalle;
+        const observaciones = detalle.observaciones ?? null;
+        console.log(detalle)
+        const sql = `INSERT INTO detalle_pedido
+            (pedido_id, producto_id, variacion_id, cantidad, precio_unitario, subtotal, observaciones)
+            VALUES (?, ?, ?, ?, ?, ?, ?)`;
+
+        await conn.execute(sql, [
+            pedido_id, producto_id, variacion_id, cantidad, precio_unitario, subtotal, observaciones
+        ]);
+}
 }

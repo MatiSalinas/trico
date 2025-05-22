@@ -3,20 +3,16 @@ import { handleHttp } from '../utils/error.handle';
 import { Pedido } from '../interfaces/producto.interface';
 import { PedidoModel } from '../models/Pedido.model';
 import { pedidoServicios } from '../services/pedidos.service';
-
+//TODO pasar la logica de calcular el total de pedidos al backend
 const postPedido = async (req: Request, res: Response) => {
     try {
-        const pedidoData : Pedido = req.body;
-        const response = await PedidoModel.createPedido(pedidoData);
-        if(response){
-            res.status(201).send("Producto Creado con exito");
-            return;
-        }
-        res.status(400).send("No se pudo cargar el producto");
+        const pedidoData: Pedido = req.body;
+        const id = await pedidoServicios.crearPedidoConDetalles(pedidoData);
+        res.status(201).json({ mensaje: "Pedido creado con éxito", id_pedido: id });
     } catch (error) {
-        handleHttp(res, "ERORR_POST_PEDIDOS",error);
+        handleHttp(res, "ERROR_POST_PEDIDO_CON_DETALLES", error);
     }
-}
+};
 const getPedidos = async (req: Request, res: Response) => {
     try {
         const response = await PedidoModel.findAllPedidos();

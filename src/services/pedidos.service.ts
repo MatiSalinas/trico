@@ -1,7 +1,8 @@
-import { PedidoConDetalles } from "../interfaces/producto.interface";
+import { PedidoConDetalles, Pedido, DetallePedido } from "../interfaces/producto.interface";
 import { DetallePedidoModel } from "../models/DetallePedido.model";
 import { ProductoModel } from "../models/Producto.model";
 import { PedidoModel } from "../models/Pedido.model";
+import  pool  from "../db/connection";
 
 export class pedidoServicios {
      /**
@@ -54,4 +55,31 @@ export class pedidoServicios {
 
         return pedidoCompleto;
     }
+
+
+    static async crearPedidoConDetalles(pedido: Pedido): Promise<number> {
+    const conn = await pool.getConnection();
+    await conn.beginTransaction();
+
+    try {
+      // 1. Insertar el pedido
+      const idPedido = await PedidoModel.createPedidoTx(pedido, conn);
+
+      // 2. Insertar detalles
+      const detalles = pedido.detalles || [];
+      for (const detalle of detalles) {
+        await DetallePedidoModel.createDetallePedidoTx(idPedido, detalle, conn);
+      }
+
+      // 3. Confirmar la transacción
+      await conn.commit();
+      return idPedido;
+
+    } catch (error) {
+      await conn.rollback();
+      throw new Error(`Error al crear el pedido con detalles: ${error}`);
+    } finally {
+      conn.release();
+    }
+  }
 }

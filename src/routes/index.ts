@@ -10,12 +10,20 @@ const cleanFileName = (fileName: string) => {
     return [file, cleanName];
 }
 readdirSync(PATH_ROUTES).filter((fileName) => {
-    const [file,cleanName] = cleanFileName(fileName);
+    const [file, cleanName] = cleanFileName(fileName);
     if (file !== "index") {
         import(`./${file}`).then((moduleRouter) => {
             console.log(`Se esta cargando la ruta ..... /${cleanName}`);
-            router.use(`/${cleanName}`, moduleRouter.router);
-        });   
-     }
-})
+            
+            // Intenta detectar si el export es default o named export 'router'
+            const route = moduleRouter.router || moduleRouter.default;
+            if (!route) {
+                console.error(`La ruta ${cleanName} no exporta 'router' ni default`);
+                return;
+            }
+            
+            router.use(`/${cleanName}`, route);
+        });
+    }
+});
 export {router};

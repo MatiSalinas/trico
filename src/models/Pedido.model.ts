@@ -67,6 +67,26 @@ export class PedidoModel {
 
        
     }
+
+    static async createPedidoTx(pedido: Pedido, conn: any): Promise<number> {
+        const {
+            nombre_cliente, telefono, direccion, latitud, longitud,
+            zona_entrega, costo_envio, subtotal, total,
+            metodo_pago, estado, origen, obervaciones
+        } = pedido;
+
+        const sql = `INSERT INTO pedidos 
+          (nombre_cliente, telefono, direccion, latitud, longitud, zona_entrega, costo_envio, subtotal, total, metodo_pago, estado, origen, observaciones)
+          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+
+        const [result] = await conn.execute(sql, [
+            nombre_cliente, telefono, direccion, latitud, longitud,
+            zona_entrega, costo_envio, subtotal, total,
+            metodo_pago, estado, origen, obervaciones
+        ]);
+
+        return (result as any).insertId;
+}
     static async deletePedido(id: number) : Promise<boolean> {
             const sql = "DELETE FROM pedido WHERE id_pedido = ?;";
             const [row] = await pool.execute(sql,[id]);
