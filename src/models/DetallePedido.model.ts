@@ -38,7 +38,7 @@ export class DetallePedidoModel {
         return (result as any).affectedRows > 0;
     }
 
-    static async createDetallePedidoTx(pedido_id: number, detalle: DetallePedido, conn: any): Promise<void> {
+    static async createDetallePedido(pedido_id: number, detalle: DetallePedido, conn: any): Promise<void> {
         const { producto_id, variacion_id, cantidad, precio_unitario, subtotal,  } = detalle;
         const observaciones = detalle.observaciones ?? null;
         console.log(detalle)

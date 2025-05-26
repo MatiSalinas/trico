@@ -3,10 +3,11 @@ import { handleHttp } from '../utils/error.handle';
 import { Pedido } from '../interfaces/producto.interface';
 import { PedidoModel } from '../models/Pedido.model';
 import { pedidoServicios } from '../services/pedidos.service';
+import { CreatePedidoDTO } from '../interfaces/pedidos.interface';
 //TODO pasar la logica de calcular el total de pedidos al backend
 const postPedido = async (req: Request, res: Response) => {
     try {
-        const pedidoData: Pedido = req.body;
+        const pedidoData: CreatePedidoDTO = req.body;
         const id = await pedidoServicios.crearPedidoConDetalles(pedidoData);
         res.status(201).json({ mensaje: "Pedido creado con éxito", id_pedido: id });
     } catch (error) {

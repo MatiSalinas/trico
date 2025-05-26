@@ -33,42 +33,7 @@ export class PedidoModel {
 
     }
 
-    static async createPedido(pedido: Pedido) : Promise <boolean>{
-        const {nombre_cliente,
-            telefono,
-            direccion,
-            latitud,
-            longitud,
-            zona_entrega,
-            costo_envio,
-            subtotal,
-            total,
-            metodo_pago,
-            estado,
-            origen,
-            obervaciones} = pedido
-
-            const parametros = [nombre_cliente,
-                telefono,
-                direccion,
-                latitud,
-                longitud,
-                zona_entrega,
-                costo_envio,
-                subtotal,
-                total,
-                metodo_pago,
-                estado,
-                origen,
-                obervaciones]
-        const sql = "INSERT INTO pedido (nombre_cliente, telefono, direccion, latitud, longitud, zona_entrega, costo_envio, sub_total, total, metodo_pago,estado,origen,observaciones) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
-        const [result] = await pool.execute(sql,parametros)
-        return (result as any).affectedRows > 0;
-
-       
-    }
-
-    static async createPedidoTx(pedido: Pedido, conn: any): Promise<number> {
+    static async createPedido(pedido: Pedido, conn: any): Promise<number> {
         const {
             nombre_cliente, telefono, direccion, latitud, longitud,
             zona_entrega, costo_envio, subtotal, total,
@@ -93,12 +58,5 @@ export class PedidoModel {
             return (row as any).affectedRows > 0;
     }
 
-    static async findPrecioVariante(id_producto: number, id_variante: number ) : Promise<number>{
-        const sql = `SELECT (precio_adicional + precio) AS sub_total FROM productos p 
-        INNER JOIN variaciones_productos vp ON p.id_producto = vp.id_producto 
-        WHERE p.id_producto = ? AND pv.id_variaciones_producto = ?`
-
-        const [result] = await pool.execute(sql,[id_producto,id_variante])
-        return (result as any).sub_total;
-    }
+    
  }

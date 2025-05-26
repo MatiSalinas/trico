@@ -126,4 +126,13 @@ export class ProductoModel {
             throw new Error(`Error al actualizar el producto ${error}`)
         }
     }
+
+    static async findPrecioVariante(id_producto: number, id_variante: number ) : Promise<number>{
+        const sql = `SELECT (precio_adicional + precio) AS sub_total FROM productos p 
+        INNER JOIN variaciones_productos vp ON p.id_producto = vp.id_producto 
+        WHERE p.id_producto = ? AND pv.id_variaciones_producto = ?`
+
+        const [result] = await pool.execute(sql,[id_producto,id_variante])
+        return (result as any).sub_total;
+    }
 }

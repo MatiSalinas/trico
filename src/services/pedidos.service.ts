@@ -3,6 +3,7 @@ import { DetallePedidoModel } from "../models/DetallePedido.model";
 import { ProductoModel } from "../models/Producto.model";
 import { PedidoModel } from "../models/Pedido.model";
 import  pool  from "../db/connection";
+import { CreatePedidoDTO, DetallePedidoCalculado } from "../interfaces/pedidos.interface";
 
 export class pedidoServicios {
      /**
@@ -57,18 +58,22 @@ export class pedidoServicios {
     }
 
 
-    static async crearPedidoConDetalles(pedido: Pedido): Promise<number> {
+  static async crearPedidoConDetalles(data: CreatePedidoDTO): Promise<number> {
     const conn = await pool.getConnection();
     await conn.beginTransaction();
 
     try {
+      const detallesCalculados : DetallePedidoCalculado[] = [];
+      let subtotal = 0;
+
+      for (const item of data.detalles)
       // 1. Insertar el pedido
-      const idPedido = await PedidoModel.createPedidoTx(pedido, conn);
+      const idPedido = await PedidoModel.createPedido(pedido, conn);
 
       // 2. Insertar detalles
       const detalles = pedido.detalles || [];
       for (const detalle of detalles) {
-        await DetallePedidoModel.createDetallePedidoTx(idPedido, detalle, conn);
+        await DetallePedidoModel.createDetallePedido(idPedido, detalle, conn);
       }
 
       // 3. Confirmar la transacción
